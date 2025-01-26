@@ -4,7 +4,7 @@ This repository contains notes and summaries of popular software design and arch
 
 ## Books
 
-- [Patterns of Enterprise Application Architecture (POEAA)](poeaa.md)
+- [Patterns of Enterprise Application Architecture](patterns-of-enterprise-application-architecture.md)
 - (Add more books as you create notes for them!)
 
 ## Contributing
