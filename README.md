@@ -5,7 +5,7 @@ This repository contains notes and summaries of popular software design and arch
 ## Books
 
 - [Patterns of Enterprise Application Architecture](patterns-of-enterprise-application-architecture.md)
-- more is coming ...
+- more is coming...
 
 ## Contributing
 
