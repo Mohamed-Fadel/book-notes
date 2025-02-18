@@ -142,8 +142,6 @@ The **Service Layer** provides a facade for business logic, isolating the presen
 
 The **Data Source Layer** is a critical component in enterprise applications, responsible for communicating with various infrastructure pieces required for the application to function. This layer handles data persistence, retrieval, and management, ensuring seamless interaction between the application and its data sources.
 
----
-
 ## Key Architecture Patterns for Data Persistence
 
 When designing the data source layer, it’s essential to separate **SQL access** from **domain logic**. This separation improves maintainability and scalability. Below are the three primary patterns for handling data persistence in relational databases:
@@ -174,8 +172,6 @@ When designing the data source layer, it’s essential to separate **SQL access*
   - Ensures that domain objects remain unaware of the database structure.
 - **Advantage**: Provides better separation of concerns, making the system more maintainable and testable.
 
----
-
 ## Behavioral Patterns for Data Persistence
 
 Managing data persistence efficiently requires addressing performance and concurrency challenges. The following patterns help optimize these aspects:
@@ -201,8 +197,6 @@ Managing data persistence efficiently requires addressing performance and concur
   - Avoids loading unnecessary data, improving performance.
   - **Challenge**: Can lead to the **N+1 problem** (ripple loading), where multiple queries are executed for nested entities. This can be mitigated using **eager loading**.
 
----
-
 ## Structural Mapping Patterns
 
 Mapping relationships between objects and database tables is a key challenge in enterprise applications. Below are some strategies:
@@ -225,8 +219,6 @@ Mapping relationships between objects and database tables is a key challenge in 
   - Uses one table per class in the hierarchy.
   - **Downside**: Requires multiple joins, impacting performance.
 
----
-
 ## Best Practices for Reading Data
 - **Optimize Queries**: Pull more rows and filter in memory rather than issuing multiple queries.
 - **Use Joins**: Retrieve data from multiple tables in a single query.
@@ -234,8 +226,6 @@ Mapping relationships between objects and database tables is a key challenge in 
   - Cluster frequently accessed data.
   - Use indexes strategically.
   - Leverage database caching mechanisms.
-
----
 
 ## Conclusion
 
