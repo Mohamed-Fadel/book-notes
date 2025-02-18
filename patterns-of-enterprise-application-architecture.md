@@ -136,3 +136,110 @@ The **Service Layer** provides a facade for business logic, isolating the presen
 - **Table Module**: Suits systems heavily reliant on Record Sets and centralized table-based logic.
 - **Service Layer**: Acts as a glue between presentation and domain logic, providing a clear separation of concerns.
 
+---
+
+# Chapter 3: Mapping to Relational Databases (POEAA Notes)
+
+The **Data Source Layer** is a critical component in enterprise applications, responsible for communicating with various infrastructure pieces required for the application to function. This layer handles data persistence, retrieval, and management, ensuring seamless interaction between the application and its data sources.
+
+---
+
+## Key Architecture Patterns for Data Persistence
+
+When designing the data source layer, it’s essential to separate **SQL access** from **domain logic**. This separation improves maintainability and scalability. Below are the three primary patterns for handling data persistence in relational databases:
+
+### 1. **Gateway Pattern**
+- **Purpose**: Acts as a bridge between the application and the database.
+- **Characteristics**:
+  - Does not include domain logic.
+  - Focuses solely on database connections and operations.
+  - Should be as generic as possible, and can even be auto-generated.
+- **Types**:
+  - **Row Data Gateway**: Maps a single row in a database table to an object (commonly used in ORMs).
+  - **Table Data Gateway**: Maps an entire table to a single class, often used with RecordSets.
+- **Downside**: Changes to the database schema or domain model require corresponding updates in the Gateway.
+
+### 2. **Active Record Pattern**
+- **Purpose**: Combines domain logic and database access into a single object.
+- **Characteristics**:
+  - Each domain object (e.g., a `Customer`) knows how to interact with its corresponding database table.
+  - Simplifies code by eliminating repetitive database access logic.
+- **Use Case**: Ideal for applications with straightforward domain logic and minimal complexity.
+
+### 3. **Data Mapper Pattern**
+- **Purpose**: Decouples domain objects from the database.
+- **Characteristics**:
+  - Maps database tables or views to domain models.
+  - Handles all loading and storing operations between the database and domain objects.
+  - Ensures that domain objects remain unaware of the database structure.
+- **Advantage**: Provides better separation of concerns, making the system more maintainable and testable.
+
+---
+
+## Behavioral Patterns for Data Persistence
+
+Managing data persistence efficiently requires addressing performance and concurrency challenges. The following patterns help optimize these aspects:
+
+### 1. **Unit of Work**
+- **Purpose**: Tracks all objects read from or modified in the database.
+- **Characteristics**:
+  - Acts as a controller for database mapping.
+  - Compares snapshots of entities to persist only modified objects.
+  - Ensures consistency and reduces unnecessary database writes.
+
+### 2. **Identity Map**
+- **Purpose**: Ensures that each entity is loaded only once.
+- **Characteristics**:
+  - Maintains a map of all loaded objects for quick lookup.
+  - Prevents duplicate objects in memory.
+  - Acts as a caching mechanism, though its primary goal is to ensure object uniqueness.
+
+### 3. **Lazy Loading**
+- **Purpose**: Delays loading of nested or related data until it’s actually needed.
+- **Characteristics**:
+  - Stores references to nested entities instead of loading them immediately.
+  - Avoids loading unnecessary data, improving performance.
+  - **Challenge**: Can lead to the **N+1 problem** (ripple loading), where multiple queries are executed for nested entities. This can be mitigated using **eager loading**.
+
+---
+
+## Structural Mapping Patterns
+
+Mapping relationships between objects and database tables is a key challenge in enterprise applications. Below are some strategies:
+
+### 1. **Mapping Relationships**
+- Use **Identity Fields** to maintain relational identity for each object.
+- For **Small Value Objects** (e.g., date ranges, money objects):
+  - Store them as columns in the parent entity’s table.
+  - Use **Serialized LOB** (Large Object) for complex value objects that don’t require querying.
+- For queryable value objects, explode their members into columns of the parent entity.
+
+### 2. **Inheritance Mapping**
+- **Single Table Inheritance**:
+  - Stores all subclasses in a single table.
+  - **Downside**: Wasted space due to unused columns.
+- **Concrete Table Inheritance**:
+  - Uses one table per concrete class.
+  - **Downside**: Brittle to changes in the class hierarchy.
+- **Class Table Inheritance**:
+  - Uses one table per class in the hierarchy.
+  - **Downside**: Requires multiple joins, impacting performance.
+
+---
+
+## Best Practices for Reading Data
+- **Optimize Queries**: Pull more rows and filter in memory rather than issuing multiple queries.
+- **Use Joins**: Retrieve data from multiple tables in a single query.
+- **Database Optimization**:
+  - Cluster frequently accessed data.
+  - Use indexes strategically.
+  - Leverage database caching mechanisms.
+
+---
+
+## Conclusion
+
+Choosing the right data persistence pattern is crucial for the scalability, maintainability, and performance of enterprise applications. Whether you opt for **Gateway**, **Active Record**, or **Data Mapper**, each pattern has its strengths and trade-offs. Additionally, leveraging behavioral patterns like **Unit of Work**, **Identity Map**, and **Lazy Loading** can significantly enhance performance and consistency.
+
+For complex domain models, consider using **commercial O/R mapping tools**, as they offer sophisticated features that are difficult to implement manually.
+
